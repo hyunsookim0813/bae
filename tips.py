@@ -82,3 +82,16 @@ model.summary()
 #다중선형회귀
 model = ols('종속~독립+독립2',data=df).fit()
 model.summary()
+
+#일원분산분석
+stats.f_oneway(df[a],df[b],df[C],df[d])
+#anova table
+from statsmodel.formula.api import ols
+from statsmodel.anova import anova_lm
+model = ols('value~variable'data=df).fit()
+anova_lm(model)
+#이원분석
+from statsmodel.formula.api import ols
+from statsmodel.anova import anova_lm
+model = ols('value~var+var2+var:var2'data=df).fit()
+anova_lm(model)
