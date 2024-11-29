@@ -29,8 +29,8 @@ submit.to_csv('result.csv',index=False)
 pd.read_csv('result.csv')
 --------------------------
 import pandas as pd
-train = pd.read_csv("https://raw.githubusercontent.com/lovedlim/inf/refs/heads/main/p4/6_2/energy_train.csv")
-test = pd.read_csv("https://raw.githubusercontent.com/lovedlim/inf/refs/heads/main/p4/6_2/energy_test.csv")
+train = pd.read_csv("train.csv")
+test = pd.read_csv("test.csv")
 
 target = train['Heat_Load']
 train = train.drop('Heat_Load',axis=1)
@@ -53,6 +53,11 @@ pred[:3]
 from sklearn.metrics import f1_score
 f1_score(y_val,pred,average='macro')
 pred = model.predict(test)
+
 submit = pd.DataFrame({'pred':pred})
 submit.to_csv('수험번호.csv',index=False)
 submit
+---------------------------
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+scaler = MinMaxScaler()
+scaler.fit_transform(df[['target']])
