@@ -70,6 +70,9 @@ stats.chisquare(관찰,기대)
 #독립성검정
 df=[[80,20],[90,10]]
 stats.chi2_contingency(df)
+from statsmodels.formula.api import logit
+logit(‘종속 ~ 독립’, data=df).fit()
+np.exp(model.params[‘변수’]*5) 5 만큼 증가할 때
 df=pd.crosstab(df['a'],df['b'])
 stats.chi2_contingency(df)
 
