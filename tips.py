@@ -37,6 +37,7 @@ scaler.fit_transform(df[['target']])
 
 pd.to_datetime(df['time'],format=%Y:%m:%d)
 --------------------------
+print(dir(scipy.stats))
 #단일표본
 from scipy import stats
 stats.ttest_1samp(df['target'],기준)
@@ -62,3 +63,22 @@ stats.ttest_ind(a,b,equal_val=True,alternative='less')
 stats.shapiro(a),stats.shapiro(b)
 #mannwhitneyu 비모수
 stats.mannwhitneyu(a,b,alternative='less') 
+
+#적합도검정
+from scipy import stats
+stats.chisquare(관찰,기대)
+#독립성검정
+df=[[80,20],[90,10]]
+stats.chi2_contingency(df)
+df=pd.crosstab(df['a'],df['b'])
+stats.chi2_contingency(df)
+
+#상관
+df.corr(numeric_only=True)
+#단순선형회귀
+import statsmodels.formula.api as ols
+model = ols('종속~독립',data=df).fit()
+model.summary()
+#다중선형회귀
+model = ols('종속~독립+독립2',data=df).fit()
+model.summary()
