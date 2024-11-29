@@ -12,14 +12,17 @@ from sklearn.model_selection import train_test_split
 X_tr, X_val, y_tr, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
 X_tr.shape, X_val.shape, y_tr.shape, y_val.shape
 
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 model = RandomForestRegressor()
+model = RandomForestClassifier()
 model.fit(X_tr,y_tr)
 pred = model.predict(X_val) #roc-auc 만 predict_proba
 pred[:10] 
 from sklearn.metrics import mean_squared_error
 mae = mean_squared_error(y_val, pred)
 print(mae)
+from sklearn.metrics import f1_score
+f1_score(y_val,pred,average='macro')
 
 pred = model.predict(test)
 pred[:10]
@@ -27,37 +30,35 @@ pred[:10]
 submit = pd.DataFrame({'pred':pred}) #pred[:,1]
 submit.to_csv('result.csv',index=False)
 pd.read_csv('result.csv')
---------------------------
-import pandas as pd
-train = pd.read_csv("train.csv")
-test = pd.read_csv("test.csv")
-
-target = train['Heat_Load']
-train = train.drop('Heat_Load',axis=1)
-train.head(2)
-
-train = pd.get_dummies(train)
-test = pd.get_dummies(test)
-train.shape, test.shape
-
-from sklearn.model_selection import train_test_split
-X_tr, X_val, y_tr, y_val = train_test_split(
-    train, target, test_size=0.2, random_state=42
-)
-
-from sklearn.ensemble import RandomForestClassifier
-model = RandomForestClassifier()
-model.fit(X_tr,y_tr)
-pred = model.predict(X_val)
-pred[:3]
-from sklearn.metrics import f1_score
-f1_score(y_val,pred,average='macro')
-pred = model.predict(test)
-
-submit = pd.DataFrame({'pred':pred})
-submit.to_csv('수험번호.csv',index=False)
-submit
 ---------------------------
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 scaler = MinMaxScaler()
 scaler.fit_transform(df[['target']])
+
+pd.to_datetime(df['time'],format=%Y:%m:%d)
+--------------------------
+#단일표본
+from scipy import stats
+stats.ttest_1samp(df['target'],기준)
+stats.ttest_1samp(df['target'],기준,alternative='greater') #대립가설
+stats.ttest_1samp(df['target'],기준,alternative='less') #기준보다
+#shapiro - 정규성 확인
+stats.shapiro(df['target'])
+#wilcoxon 비모수
+stats.wilcoxon(df['target'],기준,alternative='less')
+
+#대응표본(전, 후)
+stats.ttest_rel(df['before']-df['after'],alternative='less') #앞값기준
+#shapiro - 정규성 확인
+stats.shapiro(df['before']-df['after'])'
+#wilcoxon 비모수
+stats.wilcoxon(df['before']-df['after'],alternative='less')
+
+#독립표본(그룹간 차이)
+from scipy import stats
+stats.ttest_ind(a,b) #처리,대조
+stats.ttest_ind(a,b,equal_val=True,alternative='less')
+#shapiro - 정규성 확인
+stats.shapiro(a),stats.shapiro(b)
+#mannwhitneyu 비모수
+stats.mannwhitneyu(a,b,alternative='less') 
