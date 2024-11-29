@@ -78,6 +78,7 @@ stats.chi2_contingency(df)
 
 #상관
 df.corr(numeric_only=True)
+df.corr("변수")["종속"]
 #단순선형회귀
 import statsmodels.formula.api as ols
 model = ols('종속~독립',data=df).fit()
